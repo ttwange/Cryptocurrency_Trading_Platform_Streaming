@@ -3,6 +3,7 @@ import json
 import requests
 import pandas as pd
 from prefect import task, flow
+from confluent_kafka import Producer, KafkaError
 
 @task()
 def get_asset_data(url: str, csv_file_path: str) -> str:
@@ -49,7 +50,13 @@ def transform_asset(csv_file_path: str) -> pd.DataFrame:
     print(df)
     return df
     
-
+@task()
+def kafka_publish(df: pd.DataFrame, kafka_broker: str, kafka_topic: str):
+    """ Publish transformed data to kafka topic"""
+    producer_config = {
+    'bootstrap.servers': 'localhost:9092',  # Kafka broker address
+    'client.id': 'your-producer-client'
+    }
 @flow()
 def Extract_Load_transform() -> None:
     # Define the URL to fetch data from
