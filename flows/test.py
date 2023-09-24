@@ -3,9 +3,9 @@ import json
 import requests
 import pandas as pd
 from prefect import task, flow
-from confluent_kafka import Producer, KafkaError
+from confluent_kafka import Producer
 
-@task()
+@task
 def get_asset_data(url: str, csv_file_path: str) -> str:
     """Get asset data from CoinCap API and save it as a CSV file."""
     
@@ -31,7 +31,7 @@ def get_asset_data(url: str, csv_file_path: str) -> str:
         print(f"Failed to retrieve data. Status code: {response.status_code}")
         return None
     
-@task()
+@task
 def transform_asset(csv_file_path: str) -> pd.DataFrame:
     """Transform raw asset data into cleaned format for further analysis."""
     # Load data from the csv file into a dataframe
@@ -47,21 +47,22 @@ def transform_asset(csv_file_path: str) -> pd.DataFrame:
 
     df = df.drop('explorer', axis=1)
 
-    print(df)
     return df
-    
-@task()
-def kafka_publish(df: pd.DataFrame, kafka_broker: str, kafka_topic: str):
+
+@task
+def kafka_publish(df_json: str, kafka_broker: str, kafka_topic: str):
     """ Publish transformed data to kafka topic"""
     producer_config = {
-    'bootstrap.servers': 'localhost:9092',  # Kafka broker address
+    'bootstrap.servers': kafka_broker,  # Kafka broker address
     'client.id': 'your-producer-client'
     }
     producer = Producer(producer_config)
 
-    producer.produce(topic, key=key, value=value)
+    # Publish the JSON data to the Kafka topic
+    producer.produce(kafka_topic, value=df_json)
 
     producer.flush()
+
 
 @flow()
 def Extract_Load_transform() -> None:
@@ -70,11 +71,11 @@ def Extract_Load_transform() -> None:
     
     csv_file_path = "./asset_data/asset-data.csv"
     
-    df = get_asset_data(url, csv_file_path)
-    df_csv = transform_asset(df)
-    json_data = df_csv.to_json(orient="records")
+    df_path = get_asset_data(url, csv_file_path)
+    df = transform_asset(df_path)
+    df_json = df.to_json(orient="records")
 
-    kafka_publish('asset', key=message["symbol"], value=json_data)
+    kafka_publish(df_json, kafka_broker='localhost:9092', kafka_topic='asset')
 
 if __name__ == "__main__":
     Extract_Load_transform()
