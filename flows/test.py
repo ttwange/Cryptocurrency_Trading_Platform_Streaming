@@ -1,9 +1,7 @@
 import os
-import json
 import requests
 import pandas as pd
 from prefect import task, flow
-#from confluent_kafka import Producer
 from kafka import KafkaProducer
 
 @task

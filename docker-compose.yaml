@@ -94,17 +94,3 @@ services:
       interval: 30s
       timeout: 10s
       retries: 5
-#   producer:
-#     image: python:3.9
-#     container_name: producer
-#     depends_on:
-#       - broker
-#     volumes:
-#       - ./producer:/app  # Mount a local directory containing your producer code
-#     command: python /app/producer.py  # Adjust the command as needed
-#     networks:
-#       - confluent
-
-# networks:
-#   confluent:
-
