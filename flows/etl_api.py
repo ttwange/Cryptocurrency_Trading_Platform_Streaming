@@ -59,7 +59,7 @@ def kafka_publish(df_json, kafka_topic):
 
 
 @flow()
-def Extract_Load_transform() -> None:
+def extract_Load_transform() -> None:
     # Define the URL to fetch data from
     url = "http://api.coincap.io/v2/assets"
     
@@ -72,4 +72,4 @@ def Extract_Load_transform() -> None:
     kafka_publish(df_json.encode('utf-8'),kafka_topic='asset')
 
 if __name__ == "__main__":
-    Extract_Load_transform()
+    extract_Load_transform()
