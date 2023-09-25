@@ -18,8 +18,18 @@ mongodb_host = 'localhost'
 mongodb_port = 27017  
 mongodb_database = 'crypto_data'  
 mongodb_collection = 'Crypto_asset'  
+mongodb_username = 'admin'  
+mongodb_password = 'adminpassword'  
 
-client = MongoClient(mongodb_host, mongodb_port)
+
+client = MongoClient(
+    mongodb_host,
+    mongodb_port,
+    username=mongodb_username,
+    password=mongodb_password,
+    authSource='admin',  # The authentication database
+)
+
 db = client[mongodb_database]
 collection = db[mongodb_collection]
 
@@ -35,6 +45,7 @@ for message in consumer:
         for data in data_list:
             # Insert the data into MongoDB
             collection.insert_one(data)
+            print("its working")
     
     except json.JSONDecodeError as e:
         print(f"Failed to decode JSON: {e}")
