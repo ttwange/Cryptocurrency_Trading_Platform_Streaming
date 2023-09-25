@@ -1,3 +1,4 @@
+import json
 from kafka import KafkaConsumer
 from cassandra.cluster import Cluster
 
@@ -12,14 +13,6 @@ consumer = KafkaConsumer(
     auto_offset_reset='earliest',  # You can choose 'earliest' or 'latest' based on your needs
 )
 
-def create_keyspace(session):
-    def create_keyspace(session):
-       session.execute("""
-        CREATE KEYSPACE IF NOT EXISTS crypto_data
-        WITH replication = {'class': 'SimpleStrategy', 'replication_factor': '1'};
-    """)
-
-    print("Keyspace created successfully!")
 
 # Cassandra Configuration
 cassandra_host = 'localhost'  # Update with your Cassandra host address
@@ -27,6 +20,15 @@ cassandra_keyspace = 'your_keyspace'  # Update with your Cassandra keyspace
 
 cluster = Cluster([cassandra_host])
 session = cluster.connect()
+
+# Create keyspace
+session.execute("""
+    CREATE KEYSPACE IF NOT EXISTS crypto_data
+    WITH replication = {'class': 'SimpleStrategy', 'replication_factor': '1'};
+""")
+
+print("Keyspace created successfully!")
+
 # Define the CREATE TABLE statement
 create_table_statement = f"""
     CREATE TABLE IF NOT EXISTS your_table (
