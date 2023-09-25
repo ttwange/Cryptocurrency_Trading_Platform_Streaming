@@ -27,6 +27,25 @@ cassandra_keyspace = 'your_keyspace'  # Update with your Cassandra keyspace
 
 cluster = Cluster([cassandra_host])
 session = cluster.connect()
+# Define the CREATE TABLE statement
+create_table_statement = f"""
+    CREATE TABLE IF NOT EXISTS your_table (
+        id UUID PRIMARY KEY,
+        rank INT,
+        symbol TEXT,
+        name TEXT,
+        supply DOUBLE,
+        maxSupply DOUBLE,
+        marketCapUsd DOUBLE,
+        volumeUsd24Hr DOUBLE,
+        priceUsd DOUBLE,
+        changePercent24Hr DOUBLE,
+        vwap24Hr DOUBLE
+    )
+"""
+
+# Execute the CREATE TABLE statement
+session.execute(create_table_statement)
 
 # Create a prepared statement for inserting data into Cassandra
 insert_statement = session.prepare("""
@@ -47,12 +66,46 @@ insert_statement = session.prepare("""
 
 
 # # Start consuming and writing data
+# Start consuming and writing data
 for message in consumer:
     message_value = message.value.decode('utf-8')
-    # Parse and process the message data as needed
-
-    # Insert the data into Cassandra
-    session.execute(insert_statement, (value1, value2))  # Update with your data
+    
+    try:
+        # Parse the JSON data
+        data = json.loads(message_value)
+        
+        # Extract values from the JSON data
+        id_value = data.get('id', None)
+        rank_value = data.get('rank', None)
+        symbol_value = data.get('symbol', None)
+        name_value = data.get('name', None)
+        supply_value = data.get('supply', None)
+        maxSupply_value = data.get('maxSupply', None)
+        marketCapUsd_value = data.get('marketCapUsd', None)
+        volumeUsd24Hr_value = data.get('volumeUsd24Hr', None)
+        priceUsd_value = data.get('priceUsd', None)
+        changePercent24Hr_value = data.get('changePercent24Hr', None)
+        vwap24Hr_value = data.get('vwap24Hr', None)
+        
+        # Insert the data into Cassandra
+        session.execute(insert_statement, (
+            id_value,
+            rank_value,
+            symbol_value,
+            name_value,
+            supply_value,
+            maxSupply_value,
+            marketCapUsd_value,
+            volumeUsd24Hr_value,
+            priceUsd_value,
+            changePercent24Hr_value,
+            vwap24Hr_value
+        ))
+    
+    except json.JSONDecodeError as e:
+        print(f"Failed to decode JSON: {e}")
+    except Exception as e:
+        print(f"Error processing message: {e}")
 
 # # Close the connections
 # session.shutdown()
