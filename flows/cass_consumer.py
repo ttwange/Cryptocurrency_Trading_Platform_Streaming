@@ -14,15 +14,15 @@ consumer = KafkaConsumer(
 
 # Cassandra Configuration
 cassandra_host = 'localhost'  # Update with your Cassandra host address
-cassandra_keyspace = 'your_keyspace'  # Update with your Cassandra keyspace
+#cassandra_keyspace = 'your_keyspace'  # Update with your Cassandra keyspace
 
 cluster = Cluster([cassandra_host])
-session = cluster.connect(keyspace=cassandra_keyspace)
+session = cluster.connect()
 
 # Create a prepared statement for inserting data into Cassandra
-insert_statement = session.prepare("INSERT INTO your_table (column1, column2) VALUES (?, ?)")
+#insert_statement = session.prepare("INSERT INTO your_table (column1, column2) VALUES (?, ?)")
 
-# Start consuming and writing data
+# # Start consuming and writing data
 for message in consumer:
     message_value = message.value.decode('utf-8')
     # Parse and process the message data as needed
@@ -30,6 +30,6 @@ for message in consumer:
     # Insert the data into Cassandra
     session.execute(insert_statement, (value1, value2))  # Update with your data
 
-# Close the connections
-session.shutdown()
-cluster.shutdown()
+# # Close the connections
+# session.shutdown()
+# cluster.shutdown()
