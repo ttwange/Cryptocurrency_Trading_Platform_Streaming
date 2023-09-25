@@ -67,6 +67,7 @@ def extract_Load_transform() -> None:
     
     df_path = get_asset_data(url, csv_file_path)
     df = transform_asset(df_path)
+    print(df.dtypes)
     df_json = df.to_json(orient="records")
 
     kafka_publish(df_json.encode('utf-8'),kafka_topic='asset')

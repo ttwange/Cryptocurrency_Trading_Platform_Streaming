@@ -12,15 +12,39 @@ consumer = KafkaConsumer(
     auto_offset_reset='earliest',  # You can choose 'earliest' or 'latest' based on your needs
 )
 
+def create_keyspace(session):
+    def create_keyspace(session):
+       session.execute("""
+        CREATE KEYSPACE IF NOT EXISTS crypto_data
+        WITH replication = {'class': 'SimpleStrategy', 'replication_factor': '1'};
+    """)
+
+    print("Keyspace created successfully!")
+
 # Cassandra Configuration
 cassandra_host = 'localhost'  # Update with your Cassandra host address
-#cassandra_keyspace = 'your_keyspace'  # Update with your Cassandra keyspace
+cassandra_keyspace = 'your_keyspace'  # Update with your Cassandra keyspace
 
 cluster = Cluster([cassandra_host])
 session = cluster.connect()
 
 # Create a prepared statement for inserting data into Cassandra
-#insert_statement = session.prepare("INSERT INTO your_table (column1, column2) VALUES (?, ?)")
+insert_statement = session.prepare("""
+    INSERT INTO your_table (
+        id,
+        rank,
+        symbol,
+        name,
+        supply,
+        maxSupply,
+        marketCapUsd,
+        volumeUsd24Hr,
+        priceUsd,
+        changePercent24Hr,
+        vwap24Hr
+    ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+""")
+
 
 # # Start consuming and writing data
 for message in consumer:
