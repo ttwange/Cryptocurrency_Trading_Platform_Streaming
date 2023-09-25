@@ -3,7 +3,8 @@ import json
 import requests
 import pandas as pd
 from prefect import task, flow
-from confluent_kafka import Producer
+#from confluent_kafka import Producer
+from kafka import KafkaProducer
 
 @task
 def get_asset_data(url: str, csv_file_path: str) -> str:
@@ -50,16 +51,11 @@ def transform_asset(csv_file_path: str) -> pd.DataFrame:
     return df
 
 @task
-def kafka_publish(df_json: str, kafka_broker: str, kafka_topic: str):
+def kafka_publish(df_json, kafka_topic):
     """ Publish transformed data to kafka topic"""
-    producer_config = {
-    'bootstrap.servers': kafka_broker,  # Kafka broker address
-    'client.id': 'your-producer-client'
-    }
-    producer = Producer(producer_config)
-
+    producer = KafkaProducer(bootstrap_servers=['localhost:9092'],max_block_ms=5000)
     # Publish the JSON data to the Kafka topic
-    producer.produce(kafka_topic, value=df_json)
+    producer.send(kafka_topic, value=df_json)
 
     producer.flush()
 
@@ -75,7 +71,7 @@ def Extract_Load_transform() -> None:
     df = transform_asset(df_path)
     df_json = df.to_json(orient="records")
 
-    kafka_publish(df_json, kafka_broker='localhost:9092', kafka_topic='asset')
+    kafka_publish(df_json.encode('utf-8'),kafka_topic='asset')
 
 if __name__ == "__main__":
     Extract_Load_transform()
