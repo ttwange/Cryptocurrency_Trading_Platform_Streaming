@@ -94,14 +94,12 @@ services:
       interval: 30s
       timeout: 10s
       retries: 5
-  cassandra_db:
-    image: cassandra:latest
-    container_name: cassandra
-    hostname: cassandra
+  mongodb:
+    image: mongo:latest
+    container_name: mongodb
+    hostname: mongodb
     ports:
-      - "9042:9042"
+      - "27017:27017"
     environment:
-      - MAX_HEAP_SIZE=512M
-      - HEAP_NEWSIZE=100M
-      - CASSANDRA_USERNAME=cassandra
-      - CASSANDRA_PASSWORD=cassandra
+      - MONGO_INITDB_ROOT_USERNAME=admin
+      - MONGO_INITDB_ROOT_PASSWORD=adminpassword
