@@ -13,15 +13,3 @@ consumer = KafkaConsumer(
     auto_offset_reset='earliest',  # You can choose 'earliest' or 'latest' based on your needs
 )
 
-# Cassandra Configuration
-cassandra_host = 'localhost'  # Update with your Cassandra host address
-
-cluster = Cluster([cassandra_host])
-session = cluster.connect()
-
-# Set the keyspace explicitly
-session.execute("USE crypto_data")  # Use the correct keyspace name
-
-
-session.shutdown()
-cluster.shutdown()
