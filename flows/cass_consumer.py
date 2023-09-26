@@ -42,22 +42,6 @@ print("Table created")
 # Execute the CREATE TABLE statement
 session.execute(create_table_statement)
 
-# Create a prepared statement for inserting data into Cassandra
-insert_statement = session.prepare("""
-    INSERT INTO Crypto_asset (
-        id,
-        rank,
-        symbol,
-        name,
-        supply,
-        maxSupply,
-        marketCapUsd,
-        volumeUsd24Hr,
-        priceUsd,
-        changePercent24Hr,
-        vwap24Hr
-    ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
-""")
 
 # Start consuming and writing data
 
