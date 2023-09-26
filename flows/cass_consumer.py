@@ -60,28 +60,7 @@ insert_statement = session.prepare("""
 """)
 
 # Start consuming and writing data
-for message in consumer:
-    message_value = message.value.decode('utf-8')
-    
-    try:
-        # Parse the JSON data as a list of objects
-        data_list = json.loads(message_value)
-        
-        # Iterate through the list and process each JSON object
-        for data in data_list:
-            # Extract values from the JSON object
-            id_value = data.get('id', None)
-            rank_value = data.get('rank', None)
-            symbol_value = data.get('symbol', None)
-            name_value = data.get('name', None)
-            supply_value = data.get('supply', None)
-            maxSupply_value = data.get('maxSupply', None)
-            marketCapUsd_value = data.get('marketCapUsd', None)
-            volumeUsd24Hr_value = data.get('volumeUsd24Hr', None)
-            priceUsd_value = data.get('priceUsd', None)
-            changePercent24Hr_value = data.get('changePercent24Hr', None)
-            vwap24Hr_value = data.get('vwap24Hr', None)
-            print(id_value)
+
             # Insert the data into Cassandra
             session.execute(insert_statement, (
                 id_value,
