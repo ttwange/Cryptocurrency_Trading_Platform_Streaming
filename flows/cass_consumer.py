@@ -42,11 +42,5 @@ print("Table created")
 # Execute the CREATE TABLE statement
 session.execute(create_table_statement)
 
-    except json.JSONDecodeError as e:
-        print(f"Failed to decode JSON: {e}")
-    except Exception as e:
-        print(f"Error processing message: {e}")
-
-# Close the connections
 session.shutdown()
 cluster.shutdown()
