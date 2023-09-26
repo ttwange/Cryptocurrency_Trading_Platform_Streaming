@@ -22,25 +22,6 @@ session = cluster.connect()
 # Set the keyspace explicitly
 session.execute("USE crypto_data")  # Use the correct keyspace name
 
-# Define the CREATE TABLE statement
-create_table_statement = f"""
-    CREATE TABLE IF NOT EXISTS Crypto_asset (
-        id TEXT PRIMARY KEY,
-        rank INT,
-        symbol TEXT,
-        name TEXT,
-        supply DOUBLE,
-        maxSupply DOUBLE,
-        marketCapUsd DOUBLE,
-        volumeUsd24Hr DOUBLE,
-        priceUsd DOUBLE,
-        changePercent24Hr DOUBLE,
-        vwap24Hr DOUBLE
-    )
-"""
-print("Table created")
-# Execute the CREATE TABLE statement
-session.execute(create_table_statement)
 
 session.shutdown()
 cluster.shutdown()
