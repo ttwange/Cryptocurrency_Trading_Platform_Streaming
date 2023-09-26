@@ -42,24 +42,6 @@ print("Table created")
 # Execute the CREATE TABLE statement
 session.execute(create_table_statement)
 
-
-# Start consuming and writing data
-
-            # Insert the data into Cassandra
-            session.execute(insert_statement, (
-                id_value,
-                rank_value,
-                symbol_value,
-                name_value,
-                supply_value,
-                maxSupply_value,
-                marketCapUsd_value,
-                volumeUsd24Hr_value,
-                priceUsd_value,
-                changePercent24Hr_value,
-                vwap24Hr_value
-            ))
-    
     except json.JSONDecodeError as e:
         print(f"Failed to decode JSON: {e}")
     except Exception as e:
