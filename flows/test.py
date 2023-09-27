@@ -2,9 +2,10 @@ import json
 from kafka import KafkaConsumer
 import psycopg2
 from prefect import flow
+import logging
 
-# Define a Prefect task function
-@flo
+
+@flow()
 def process_kafka_to_postgres():
     # Kafka Consumer Configuration
     kafka_bootstrap_servers = 'localhost:9092'
@@ -24,6 +25,9 @@ def process_kafka_to_postgres():
     postgres_user = 'api_user'
     postgres_password = 'api_user'
 
+    logger = logging.getLogger(__name__)
+    logger.setLevel(logging.INFO)
+
     # Connect to the PostgreSQL database
     try:
         conn = psycopg2.connect(
@@ -34,9 +38,9 @@ def process_kafka_to_postgres():
             password=postgres_password
         )
         cursor = conn.cursor()
-        prefect.context.logger.info("Connected to PostgreSQL")
+        logging.info("Connected to PostgreSQL")
     except Exception as e:
-        prefect.context.logger.error(f"Error connecting to PostgreSQL: {e}")
+        logging.error(f"Error connecting to PostgreSQL: {e}")
         raise
 
     try:
@@ -55,7 +59,8 @@ def process_kafka_to_postgres():
                         INSERT INTO Crypto_asset (
                             id, rank, symbol, name, supply, maxSupply, marketCapUsd,
                             volumeUsd24Hr, priceUsd, changePercent24Hr, vwap24Hr
-                        ) VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s);
+                        ) VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)
+                        ON CONFLICT (id) DO NOTHING;
                     """
                     # Insert the data into PostgreSQL
                     cursor.execute(insert_sql, (
@@ -64,16 +69,17 @@ def process_kafka_to_postgres():
                         data['changePercent24Hr'], data['vwap24Hr']
                     ))
                     conn.commit()
-                    prefect.context.logger.info("Data inserted into PostgreSQL")
+                    logging.info("Data inserted into PostgreSQL")
 
             except json.JSONDecodeError as e:
-                prefect.context.logger.error(f"Failed to decode JSON: {e}")
+                logging.error(f"Failed to decode JSON: {e}")
             except Exception as e:
-                prefect.context.logger.error(f"Error processing message: {e}")
+                logging.error(f"Error processing message: {e}")
 
     finally:
         # Close the PostgreSQL connection
         cursor.close()
         conn.close()
 
-# You can now use this Prefect task in your Prefect workflow
+if __name__ == '__main__':
+    process_kafka_to_postgres()

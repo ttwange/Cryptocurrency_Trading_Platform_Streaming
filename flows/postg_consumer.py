@@ -45,16 +45,16 @@ for message in consumer:
         
         # Iterate through the list and process each JSON object
         for data in data_list:
-            # Define your INSERT SQL statement based on your table structure
+            # Define your INSERT SQL statement based on your updated table structure
             insert_sql = """
                 INSERT INTO Crypto_asset (
-                    id, rank, symbol, name, supply, maxSupply, marketCapUsd,
+                    rank, symbol, assetName, supply, maxSupply, marketCapUsd,
                     volumeUsd24Hr, priceUsd, changePercent24Hr, vwap24Hr
-                ) VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s);
+                ) VALUES (DEFAULT, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s);
             """
             # Insert the data into PostgreSQL
             cursor.execute(insert_sql, (
-                data['id'], data['rank'], data['symbol'], data['name'], data['supply'],
+                data['rank'], data['symbol'], data['name'], data['supply'],
                 data['maxSupply'], data['marketCapUsd'], data['volumeUsd24Hr'], data['priceUsd'],
                 data['changePercent24Hr'], data['vwap24Hr']
             ))
@@ -65,6 +65,9 @@ for message in consumer:
         print(f"Failed to decode JSON: {e}")
     except Exception as e:
         print(f"Error processing message: {e}")
+
+# ...
+
 
 # Close the PostgreSQL connection
 cursor.close()
