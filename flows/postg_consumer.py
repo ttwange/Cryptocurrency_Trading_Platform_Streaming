@@ -47,7 +47,7 @@ for message in consumer:
         for data in data_list:
             # Define your INSERT SQL statement based on your modified table structure
             insert_sql = """
-                INSERT INTO Crypto_asset_new (
+                INSERT INTO Crypto_asset (
                     assetName, rank, symbol, supply, maxSupply, marketCapUsd,
                     volumeUsd24Hr, priceUsd, changePercent24Hr, vwap24Hr
                 ) VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s);
