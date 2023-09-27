@@ -43,43 +43,37 @@ def process_kafka_to_postgres():
         logging.error(f"Error connecting to PostgreSQL: {e}")
         raise
 
-    try:
-        # Start consuming and writing data to PostgreSQL
-        for message in consumer:
-            message_value = message.value.decode('utf-8')
-
-            try:
-                # Parse the JSON data as a list of objects
-                data_list = json.loads(message_value)
-
-                # Iterate through the list and process each JSON object
-                for data in data_list:
-                    # Define your INSERT SQL statement based on your table structure
-                    insert_sql = """
-                        INSERT INTO Crypto_asset (
-                            id, rank, symbol, name, supply, maxSupply, marketCapUsd,
-                            volumeUsd24Hr, priceUsd, changePercent24Hr, vwap24Hr
-                        ) VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)
-                        ON CONFLICT (id) DO NOTHING;
-                    """
-                    # Insert the data into PostgreSQL
-                    cursor.execute(insert_sql, (
-                        data['id'], data['rank'], data['symbol'], data['name'], data['supply'],
-                        data['maxSupply'], data['marketCapUsd'], data['volumeUsd24Hr'], data['priceUsd'],
-                        data['changePercent24Hr'], data['vwap24Hr']
-                    ))
-                    conn.commit()
-                    logging.info("Data inserted into PostgreSQL")
-
-            except json.JSONDecodeError as e:
-                logging.error(f"Failed to decode JSON: {e}")
-            except Exception as e:
-                logging.error(f"Error processing message: {e}")
-
-    finally:
-        # Close the PostgreSQL connection
-        cursor.close()
-        conn.close()
+    # Start consuming and writing data to PostgreSQL
+    for message in consumer:
+        message_value = message.value.decode('utf-8')
+        
+        try:
+            # Parse the JSON data as a list of objects
+            data_list = json.loads(message_value)
+            
+            # Iterate through the list and process each JSON object
+            for data in data_list:
+                # Define your INSERT SQL statement based on your modified table structure
+                insert_sql = """
+                    INSERT INTO Crypto_asset (
+                        assetName, rank, symbol, supply, maxSupply, marketCapUsd,
+                        volumeUsd24Hr, priceUsd, changePercent24Hr, vwap24Hr
+                    ) VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s);
+                """
+                # Insert the data into PostgreSQL
+                cursor.execute(insert_sql, (
+                    data['id'],  # Insert "id" from Kafka into "assetName" column
+                    data['rank'], data['symbol'], data['supply'], data['maxSupply'],
+                    data['marketCapUsd'], data['volumeUsd24Hr'], data['priceUsd'],
+                    data['changePercent24Hr'], data['vwap24Hr']
+                ))
+                conn.commit()
+                print("Data inserted into PostgreSQL")
+        
+        except json.JSONDecodeError as e:
+            print(f"Failed to decode JSON: {e}")
+        except Exception as e:
+            print(f"Error processing message: {e}")   
 
 if __name__ == '__main__':
     process_kafka_to_postgres()
