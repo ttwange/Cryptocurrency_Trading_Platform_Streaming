@@ -21,7 +21,9 @@ A kafka architecture for an api
 
 ## Why This Project?
 
-In this case study, we simulate a high-transaction financial company operating a real-time cryptocurrency trading platform. Users buy and sell cryptocurrencies, and the platform needs to provide up-to-the-second data on cryptocurrency prices, market orders, and user transactions. Here's why we use Kafka to feed data into MongoDB and PostgreSQL:
+In this case study, we simulate a high-transaction financial company operating a real-time cryptocurrency trading platform. Users buy and sell cryptocurrencies, and the platform needs to provide up-to-the-second data on cryptocurrency prices, market orders, and user transactions. Here's why we use Kafka to feed data into MongoDB and PostgreSQL, also have the whole project run on docker 
+![docker](https://github.com/ttwange/Cryptocurrency_Trading_Platform_Streaming/assets/86237194/bf714816-ca11-4330-9336-bfffdd168a4b)
+
 
 ### Scenario: Real-Time Cryptocurrency Trading Platform
 
@@ -62,10 +64,12 @@ The project architecture is centered around a series of well-defined steps:
 ### Kafka to MongoDB Consumer
 
 We have implemented a Python script that consumes data from the Kafka topic and inserts it into MongoDB. This ensures data availability in a flexible, schema-less format, ideal for accommodating various cryptocurrency attributes.
+![mongodb](https://github.com/ttwange/Cryptocurrency_Trading_Platform_Streaming/assets/86237194/09075003-bf82-454e-958f-f4bab58267a3)
 
 ### Kafka to PostgreSQL Consumer
 
 A separate Python script consumes data from the same Kafka topic and inserts it into PostgreSQL. This relational database is well-suited for structured financial data, allowing for complex queries and analysis.
+![post](https://github.com/ttwange/Cryptocurrency_Trading_Platform_Streaming/assets/86237194/7d5eac35-8a20-438d-aaea-0627a2e7fcb1)
 
 ## Deployment Plan
 
@@ -78,3 +82,5 @@ To maintain real-time data processing, the deployment plan runs the ETL flow eve
 ## Configuration
 
 - Customize configuration parameters
+To get to a working I had a struggle of 65 failure before getting the first one to work
+![dashboard](https://github.com/ttwange/Cryptocurrency_Trading_Platform_Streaming/assets/86237194/2438f100-9989-4c52-a951-87bb758c14df)
