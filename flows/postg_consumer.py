@@ -13,14 +13,12 @@ consumer = KafkaConsumer(
     auto_offset_reset='earliest',  
 )
 
-# PostgreSQL Configuration
 postgres_host = 'localhost'
 postgres_port = 5432
 postgres_database = 'test'
 postgres_user = 'api_user'
 postgres_password = 'api_user'
 
-# Connect to the PostgreSQL database
 try:
     conn = psycopg2.connect(
         host=postgres_host,
@@ -35,24 +33,20 @@ except Exception as e:
     print(f"Error connecting to PostgreSQL: {e}")
     exit(1)
 
-# Start consuming and writing data to PostgreSQL
 for message in consumer:
     message_value = message.value.decode('utf-8')
     
     try:
-        # Parse the JSON data as a list of objects
         data_list = json.loads(message_value)
         
-        # Iterate through the list and process each JSON object
         for data in data_list:
-            # Define your INSERT SQL statement based on your modified table structure
             insert_sql = """
                 INSERT INTO Crypto_asset (
                     assetName, rank, symbol, supply, maxSupply, marketCapUsd,
                     volumeUsd24Hr, priceUsd, changePercent24Hr, vwap24Hr
                 ) VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s);
             """
-            # Insert the data into PostgreSQL
+            
             cursor.execute(insert_sql, (
                 data['id'],  # Insert "id" from Kafka into "assetName" column
                 data['rank'], data['symbol'], data['supply'], data['maxSupply'],
@@ -67,6 +61,5 @@ for message in consumer:
     except Exception as e:
         print(f"Error processing message: {e}")
 
-# Close the PostgreSQL connection
 cursor.close()
 conn.close()
