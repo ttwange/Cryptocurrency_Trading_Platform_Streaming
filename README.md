@@ -1,6 +1,7 @@
 # Cryptocurrency_Trading_Platform_Streaming
 A kafka architecture for an api
-![Uploading kafka architecture (1).jpg…]()
+![kafka architecture (1)](https://github.com/ttwange/Cryptocurrency_Trading_Platform_Streaming/assets/86237194/f82579b4-3e37-4d0d-8bd6-8c19f493850f)
+
 
 # High-Transaction Financial API Data Processing
 
