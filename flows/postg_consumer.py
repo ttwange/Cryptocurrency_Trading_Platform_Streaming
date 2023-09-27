@@ -45,17 +45,18 @@ for message in consumer:
         
         # Iterate through the list and process each JSON object
         for data in data_list:
-            # Define your INSERT SQL statement based on your updated table structure
+            # Define your INSERT SQL statement based on your modified table structure
             insert_sql = """
-                INSERT INTO Crypto_asset (
-                    rank, symbol, assetName, supply, maxSupply, marketCapUsd,
+                INSERT INTO Crypto_asset_new (
+                    assetName, rank, symbol, supply, maxSupply, marketCapUsd,
                     volumeUsd24Hr, priceUsd, changePercent24Hr, vwap24Hr
-                ) VALUES (DEFAULT, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s);
+                ) VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s);
             """
             # Insert the data into PostgreSQL
             cursor.execute(insert_sql, (
-                data['rank'], data['symbol'], data['name'], data['supply'],
-                data['maxSupply'], data['marketCapUsd'], data['volumeUsd24Hr'], data['priceUsd'],
+                data['id'],  # Insert "id" from Kafka into "assetName" column
+                data['rank'], data['symbol'], data['supply'], data['maxSupply'],
+                data['marketCapUsd'], data['volumeUsd24Hr'], data['priceUsd'],
                 data['changePercent24Hr'], data['vwap24Hr']
             ))
             conn.commit()
@@ -65,9 +66,6 @@ for message in consumer:
         print(f"Failed to decode JSON: {e}")
     except Exception as e:
         print(f"Error processing message: {e}")
-
-# ...
-
 
 # Close the PostgreSQL connection
 cursor.close()
