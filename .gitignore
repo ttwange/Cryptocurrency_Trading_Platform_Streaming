@@ -1,3 +1,5 @@
 #folder
 kafka-data/
 asset-data/
+.env
+flows/_pycache_/
