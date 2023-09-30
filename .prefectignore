@@ -161,6 +161,6 @@ cython_debug/
 
 
 #folder
-kafka_data/
-asset_data/
-flows/__pycache__
+.kafka_data/
+.asset_data/
+.flows/__pycache__
