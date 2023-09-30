@@ -1,8 +1,12 @@
+import os
 import json
 from kafka import KafkaConsumer
 import psycopg2
 from prefect import flow
 import logging
+from dotenv import load_dotenv
+# Load environment variables from .env
+load_dotenv()
 
 
 @flow()
@@ -19,11 +23,11 @@ def process_kafka_to_postgres():
     )
 
     # PostgreSQL Configuration
-    postgres_host = 'localhost'
-    postgres_port = 5432
-    postgres_database = 'test'
-    postgres_user = 'api_user'
-    postgres_password = 'api_user'
+    postgres_host = os.getenv("postgres_host")
+    postgres_port = os.getenv("postgres_port")
+    postgres_database = os.getenv("postgres_database")
+    postgres_user = os.getenv("postgres_user")
+    postgres_password = os.getenv("postgres_password")
 
     logger = logging.getLogger(__name__)
     logger.setLevel(logging.INFO)
