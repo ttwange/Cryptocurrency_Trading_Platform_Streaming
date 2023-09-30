@@ -40,3 +40,4 @@ dask-worker-space/
 .git/
 .hg/
 asset_data
+kafka-data
