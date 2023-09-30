@@ -2,6 +2,9 @@ import os
 import json
 from kafka import KafkaConsumer
 from pymongo import MongoClient
+from dotenv import load_dotenv
+# Load environment variables from .env
+load_dotenv()
 
 # Kafka Consumer Configuration
 kafka_bootstrap_servers = 'localhost:9092'  # Update with your Kafka broker address
@@ -13,6 +16,13 @@ consumer = KafkaConsumer(
     group_id='asset_consumer_group',
     auto_offset_reset='earliest',  # You can choose 'earliest' or 'latest' based on your needs
 )
+# MongoDB Configuration
+mongodb_host = os.getenv("mongodb_host")
+mongodb_port = os.getenv("mongodb_port")
+mongodb_database = os.getenv("mongodb_database") 
+mongodb_collection = os.getenv("mongodb_collection")
+mongodb_username = os.getenv("mongodb_username")
+mongodb_password = os.getenv("mongodb_password")
 
 client = MongoClient(
     mongodb_host,
