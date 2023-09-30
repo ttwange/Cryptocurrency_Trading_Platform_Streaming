@@ -1,5 +1,5 @@
 #folder
-kafka_data
-asset_data
+kafka-data/
+asset_data/
 flows/_pycache_
 
