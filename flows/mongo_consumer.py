@@ -1,3 +1,4 @@
+import os
 import json
 from kafka import KafkaConsumer
 from pymongo import MongoClient
@@ -12,15 +13,6 @@ consumer = KafkaConsumer(
     group_id='asset_consumer_group',
     auto_offset_reset='earliest',  # You can choose 'earliest' or 'latest' based on your needs
 )
-
-# MongoDB Configuration
-mongodb_host = 'localhost' 
-mongodb_port = 27017  
-mongodb_database = 'crypto_data'  
-mongodb_collection = 'Crypto_asset'  
-mongodb_username = 'admin'  
-mongodb_password = 'adminpassword'  
-
 
 client = MongoClient(
     mongodb_host,
