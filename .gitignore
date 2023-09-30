@@ -1,3 +1,5 @@
 #folder
-kafka_data/
-.requirements
+kafka_data
+asset_data
+flows/_pycache_
+
