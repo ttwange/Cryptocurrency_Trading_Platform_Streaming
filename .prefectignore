@@ -39,5 +39,5 @@ dask-worker-space/
 # VCS
 .git/
 .hg/
-asset_data
-kafka-data
+asset_data/
+kafka-data/
