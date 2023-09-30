@@ -1,5 +1,5 @@
 #folder
 kafka-data/
 asset-data/
-flows/_pycache_
+flows/__pycache__/etl_api.cpython-310.pyc
 
