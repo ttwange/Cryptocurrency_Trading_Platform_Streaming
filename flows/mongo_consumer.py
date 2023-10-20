@@ -6,15 +6,16 @@ from dotenv import load_dotenv
 load_dotenv()
 
 # Kafka Consumer Configuration
-kafka_bootstrap_servers = 'localhost:9092'  # Update with your Kafka broker address
+kafka_bootstrap_servers = 'localhost:9092'  
 kafka_topic = 'asset'
 
 consumer = KafkaConsumer(
     kafka_topic,
     bootstrap_servers=kafka_bootstrap_servers,
     group_id='asset_consumer_group',
-    auto_offset_reset='earliest',  # You can choose 'earliest' or 'latest' based on your needs
+    auto_offset_reset='earliest',  
 )
+
 # MongoDB Configuration
 mongodb_host = os.getenv("mongodb_host")
 mongodb_port = os.getenv("mongodb_port")
@@ -28,7 +29,7 @@ client = MongoClient(
     mongodb_port,
     username=mongodb_username,
     password=mongodb_password,
-    authSource='admin',  # The authentication database
+    authSource='admin', 
 )
 
 db = client[mongodb_database]
@@ -39,7 +40,7 @@ for message in consumer:
     message_value = message.value.decode('utf-8')
     
     try:
-        # Parse the JSON data as a list of objects
+        # Parse the JSON a list of objects
         data_list = json.loads(message_value)
         
         # Iterate through the list and process each JSON object
