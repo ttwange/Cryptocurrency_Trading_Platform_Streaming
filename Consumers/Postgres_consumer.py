@@ -18,7 +18,7 @@ def process_kafka_to_postgres():
     consumer = KafkaConsumer(
         kafka_topic,
         bootstrap_servers=kafka_bootstrap_servers,
-        group_id='asset_consumer_group',
+        group_id='group2',
         auto_offset_reset='earliest',
     )
 

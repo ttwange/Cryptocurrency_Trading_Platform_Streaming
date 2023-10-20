@@ -100,3 +100,22 @@ services:
       environment:
         - MONGO_INITDB_ROOT_USERNAME=admin
         - MONGO_INITDB_ROOT_PASSWORD=adminpassword
+
+
+  consumer1:
+    image: confluentinc/cp-enterprise-kafka:5.5.3
+    container_name: consumer1
+    command: ["kafka-console-consumer", "--bootstrap-server=broker:29092", "--topic=asset", "--from-beginning"]
+    depends_on:
+      - broker
+    environment:
+      GROUP_ID: group1
+
+  consumer2:
+    image: confluentinc/cp-enterprise-kafka:5.5.3
+    container_name: consumer2
+    command: ["kafka-console-consumer", "--bootstrap-server=broker:29092", "--topic=asset", "--from-beginning"]
+    depends_on:
+      - broker
+    environment:
+      GROUP_ID: group2

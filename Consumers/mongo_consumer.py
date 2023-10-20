@@ -13,13 +13,13 @@ kafka_topic = 'asset'
 consumer = KafkaConsumer(
     kafka_topic,
     bootstrap_servers=kafka_bootstrap_servers,
-    group_id='asset_consumer_group',
+    group_id='group1',
     auto_offset_reset='earliest',  
 )
 
 # MongoDB Configuration
 mongodb_host = os.getenv("mongodb_host")
-mongodb_port = os.getenv("mongodb_port")
+mongodb_port = 27017
 mongodb_database = os.getenv("mongodb_database") 
 mongodb_collection = os.getenv("mongodb_collection")
 mongodb_username = os.getenv("mongodb_username")
@@ -44,7 +44,7 @@ for message in consumer:
         data_list = json.loads(message_value)
         for data in data_list:
             collection.insert_one(data)
-            print("its working")
+            print("Data inserted into Mongodb")
     
     except json.JSONDecodeError as e:
         print(f"Failed to decode JSON: {e}")
