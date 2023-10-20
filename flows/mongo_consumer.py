@@ -3,7 +3,6 @@ import json
 from kafka import KafkaConsumer
 from pymongo import MongoClient
 from dotenv import load_dotenv
-# Load environment variables from .env
 load_dotenv()
 
 # Kafka Consumer Configuration
