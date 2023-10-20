@@ -40,12 +40,9 @@ for message in consumer:
     message_value = message.value.decode('utf-8')
     
     try:
-        # Parse the JSON a list of objects
         data_list = json.loads(message_value)
         
-        # Iterate through the list and process each JSON object
         for data in data_list:
-            # Insert the data into MongoDB
             collection.insert_one(data)
             print("its working")
     
