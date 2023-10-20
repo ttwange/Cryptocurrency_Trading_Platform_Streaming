@@ -3,6 +3,7 @@ import json
 from kafka import KafkaConsumer
 from pymongo import MongoClient
 from dotenv import load_dotenv
+# Load environment variables from .env
 load_dotenv()
 
 # Kafka Consumer Configuration
@@ -41,7 +42,6 @@ for message in consumer:
     
     try:
         data_list = json.loads(message_value)
-        
         for data in data_list:
             collection.insert_one(data)
             print("its working")
