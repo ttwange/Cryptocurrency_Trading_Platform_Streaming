@@ -1,7 +1,7 @@
 version: '3'
 services:
   postgres:
-    image: postgres:latest
+    image: debezium/postgres:13
     container_name: postgres
     environment:
       POSTGRES_DB: mydatabase
@@ -11,7 +11,7 @@ services:
       - "5431:5432"
 
   pgadmin:
-    image: dpage/pgadmin4:latest
+    image: dpage/pgadmin4:7.6
     container_name: pgadmin
     environment:
       PGADMIN_DEFAULT_EMAIL: admin@example.com
